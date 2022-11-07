@@ -34,24 +34,28 @@ let payment_status = paymentStatus();
  */
 
 async function authonetication() {
-  await fetch(`${url}/api/get_token`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      username: username,
-      password: password,
-    }),
-  })
-    .then((response) => response.json())
-    .then((tokenDetails) => {
-      token_details = tokenDetails;
+  if (username && password) {
+    await fetch(`${url}/api/get_token`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        username: username,
+        password: password,
+      }),
     })
-    .catch((error) => {
-      console.error("Error:", error);
-    });
-  return token_details;
+      .then((response) => response.json())
+      .then((tokenDetails) => {
+        token_details = tokenDetails;
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+    return token_details;
+  } else {
+    return "User Name Not Found";
+  }
 }
 
 /**
@@ -77,8 +81,13 @@ async function checkOut(token, token_type, store_id, formdata) {
   const phoneno = /^[+]*[(]{0,1}[0-9]{1,3}[)]{0,1}[-\s\./0-9]*$/g;
   const emailid = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
   if (
+    token &&
+    token_type &&
+    store_id &&
     amount > 9 &&
+    currency &&
     customer_phone.match(phoneno) &&
+    customer_name.length > 1 &&
     customer_city.length > 1 &&
     customer_address.length > 1 &&
     customer_post_code.length === 4 &&
