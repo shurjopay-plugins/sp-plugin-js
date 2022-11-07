@@ -68,67 +68,69 @@ async function authonetication() {
  */
 
 async function checkOut(token, token_type, store_id, formdata) {
-  const {
-    amount,
-    currency,
-    customer_phone,
-    customer_name,
-    customer_city,
-    customer_address,
-    customer_post_code,
-    customer_email,
-  } = formdata;
-  const phoneno = /^[+]*[(]{0,1}[0-9]{1,3}[)]{0,1}[-\s\./0-9]*$/g;
-  const emailid = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-  if (
-    token &&
-    token_type &&
-    store_id &&
-    amount > 9 &&
-    currency &&
-    customer_phone.match(phoneno) &&
-    customer_name.length > 1 &&
-    customer_city.length > 1 &&
-    customer_address.length > 1 &&
-    customer_post_code.length === 4 &&
-    customer_email.match(emailid)
-  ) {
-    await fetch(`${url}/api/secret-pay`, {
-      method: "POST",
-      headers: {
-        authorization: `${token_type} ${token}`,
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        prefix: prefix,
-        store_id: store_id,
-        token: token,
-        return_url: return_url,
-        cancel_url: cancel_url,
-        amount: amount,
-        order_id: order_id,
-        currency: currency,
-        customer_name: customer_name,
-        customer_address: customer_address,
-        customer_phone: customer_phone,
-        customer_city: customer_city,
-        customer_email: customer_email,
-        customer_post_code: customer_post_code,
-        client_ip: client_ip,
-      }),
-    })
-      .then((response) => response.json())
-      .then((checkoutOrder) => {
-        checkout_order = checkoutOrder;
+  if (formdata) {
+    const {
+      amount,
+      currency,
+      customer_phone,
+      customer_name,
+      customer_city,
+      customer_address,
+      customer_post_code,
+      customer_email,
+    } = formdata;
+    const phoneno = /^[+]*[(]{0,1}[0-9]{1,3}[)]{0,1}[-\s\./0-9]*$/g;
+    const emailid = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    if (
+      token &&
+      token_type &&
+      store_id &&
+      amount > 9 &&
+      currency &&
+      customer_phone.match(phoneno) &&
+      customer_name.length > 1 &&
+      customer_city.length > 1 &&
+      customer_address.length > 1 &&
+      customer_post_code.length === 4 &&
+      customer_email.match(emailid)
+    ) {
+      await fetch(`${url}/api/secret-pay`, {
+        method: "POST",
+        headers: {
+          authorization: `${token_type} ${token}`,
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          prefix: prefix,
+          store_id: store_id,
+          token: token,
+          return_url: return_url,
+          cancel_url: cancel_url,
+          amount: amount,
+          order_id: order_id,
+          currency: currency,
+          customer_name: customer_name,
+          customer_address: customer_address,
+          customer_phone: customer_phone,
+          customer_city: customer_city,
+          customer_email: customer_email,
+          customer_post_code: customer_post_code,
+          client_ip: client_ip,
+        }),
       })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
-    return checkout_order;
-  } else {
-    return "Input Value is not valid";
-  }
+        .then((response) => response.json())
+        .then((checkoutOrder) => {
+          checkout_order = checkoutOrder;
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+      return checkout_order;
+    } else {
+      return "Input(Checkout) Value is not valid";
+    }
+  }else return "User Information Missing"
 }
 /**
  * This method is used for verifying order by order id which could be get by payment response object
@@ -139,26 +141,30 @@ async function checkOut(token, token_type, store_id, formdata) {
  * #throws ShurjopayVerificationException while order id is invalid or payment is not initiated properly or {#link HttpClient} exception
  */
 async function verifyPayemt(token, token_type, sp_order_id) {
-  await fetch(`${url}/api/verification`, {
-    method: "POST",
-    headers: {
-      authorization: `${token_type} ${token}`,
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      order_id: sp_order_id,
-    }),
-  })
-    .then((response) => response.json())
-    .then((paymentDetails) => {
-      verify_status = paymentDetails;
+  if (token && token_type && sp_order_id) {
+    await fetch(`${url}/api/verification`, {
+      method: "POST",
+      headers: {
+        authorization: `${token_type} ${token}`,
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        order_id: sp_order_id,
+      }),
     })
-    .catch((error) => {
-      console.error("Error:", error);
-    });
+      .then((response) => response.json())
+      .then((paymentDetails) => {
+        verify_status = paymentDetails;
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
 
-  return verify_status;
+    return verify_status;
+  } else {
+    return "Reqire Data Not Found";
+  }
 }
 
 /**
@@ -171,25 +177,29 @@ async function verifyPayemt(token, token_type, sp_order_id) {
  */
 
 async function paymentStatus(token, token_type, sp_order_id) {
-  await fetch(`${url}/api/payment-status`, {
-    method: "POST",
-    headers: {
-      authorization: `${token_type} ${token}`,
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      order_id: sp_order_id,
-    }),
-  })
-    .then((response) => response.json())
-    .then((paymentDetails) => {
-      payment_status = paymentDetails;
+  if (token && token_type && sp_order_id) {
+    await fetch(`${url}/api/payment-status`, {
+      method: "POST",
+      headers: {
+        authorization: `${token_type} ${token}`,
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        order_id: sp_order_id,
+      }),
     })
-    .catch((error) => {
-      console.error("Error:", error);
-    });
-  return payment_status;
+      .then((response) => response.json())
+      .then((paymentDetails) => {
+        payment_status = paymentDetails;
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+    return payment_status;
+  } else {
+    return "Reqire Data Not Found";
+  }
 }
 
 /*
