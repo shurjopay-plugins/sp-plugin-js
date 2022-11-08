@@ -9,6 +9,13 @@
 *
 */
 
+// TODO distribute using npm , bower, grunt ,cdn ,yarn 
+// TODO Data model need to be defined
+// TODO Add comments on class, method and important actions 
+// TODO remove use of global variables in plugin code
+// TODO shurjopay config injection refacorting needed. Work with CTO
+// TODO after this JS lib fully complete, write new code in TypeScript. with CTO
+
 import { setting } from "./setting.js";
 
 const url = setting.url;
@@ -31,7 +38,6 @@ let payment_status = paymentStatus();
  * #return authentication details with valid token
  * #throws ShurjopayException while merchant username and password is invalid.
  */
-
 async function authonetication() {
   if (username && password) {
     await fetch(`${url}/api/get_token`, {
@@ -60,12 +66,11 @@ async function authonetication() {
 /**
  * This method is used for making payment.
  *
- * #param Payment request object. See the shurjoPay version-2 integration documentation(beta).docx for details.
- * #return Payment response object contains redirect URL to reach payment page, order id to verify order in shurjoPay.
- * #throws ShurjopayException while merchant username and password is invalid.
- * #throws ShurjopayPaymentException while {#link PaymentReq} is not prepared properly or {#link HttpClient} exception
+ * @param Payment request object. See the shurjoPay version-2 integration documentation(beta).docx for details.
+ * @return Payment response object contains redirect URL to reach payment page, order id to verify order in shurjoPay.
+ * @throws ShurjopayException while merchant username and password is invalid.
+ * @throws ShurjopayPaymentException while {#link PaymentReq} is not prepared properly or {#link HttpClient} exception
  */
-
 async function makePayment(
   token_type,
   token,
@@ -141,15 +146,17 @@ async function makePayment(
     }
   } else return "User Information Missing";
 }
+
 /**
  * This method is used for verifying order by order id which could be get by payment response object
  *
- * #param orderId
- * #return order object if order verified successfully
- * #throws ShurjopayException while merchant user name and password is invalid.
- * #throws ShurjopayVerificationException while order id is invalid or payment is not initiated properly or {#link HttpClient} exception
+ * @param orderId
+ * @return order object if order verified successfully
+ * @throws ShurjopayException while merchant user name and password is invalid.
+ * @throws ShurjopayVerificationException while order id is invalid or payment is not initiated properly or {#link HttpClient} exception
  */
 async function verifyPayemt(token_type, token, sp_order_id) {
+  // TODO return early after if checks
   if (token && token_type && sp_order_id) {
     await fetch(`${url}/api/verification`, {
       method: "POST",
@@ -179,12 +186,11 @@ async function verifyPayemt(token_type, token, sp_order_id) {
 /**
  * This method is used for verifying order by order id which could be get by payment response object
  *
- * #param orderId
- * #return order object if order verified successfully
- * #throws ShurjopayException while merchant user name and password is invalid.
- * #throws ShurjopayVerificationException while order id is invalid or payment is not initiated properly or {#link HttpClient} exception
+ * @param orderId
+ * @return order object if order verified successfully
+ * @throws ShurjopayException while merchant user name and password is invalid.
+ * @throws ShurjopayVerificationException while order id is invalid or payment is not initiated properly or {#link HttpClient} exception
  */
-
 async function paymentStatus(token_type, token, sp_order_id) {
   if (token && token_type && sp_order_id) {
     await fetch(`${url}/api/payment-status`, {
@@ -214,7 +220,6 @@ async function paymentStatus(token_type, token, sp_order_id) {
 /*
  * Export functions and return values
  */
-
 export {
   authonetication,
   token_details,
