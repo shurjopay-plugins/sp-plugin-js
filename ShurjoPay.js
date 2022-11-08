@@ -54,7 +54,7 @@ async function authonetication() {
       });
     return token_details;
   } else {
-    return "User Name Not Found";
+    return "User  Not Found";
   }
 }
 
@@ -67,7 +67,14 @@ async function authonetication() {
  * #throws ShurjopayPaymentException while {#link PaymentReq} is not prepared properly or {#link HttpClient} exception
  */
 
-async function checkOut(token, token_type, store_id, formdata) {
+async function checkOut(
+  token_type,
+  token,
+  store_id,
+  order_id,
+  formdata,
+  client_ip
+) {
   if (formdata) {
     const {
       amount,
@@ -82,8 +89,8 @@ async function checkOut(token, token_type, store_id, formdata) {
     const phoneno = /^[+]*[(]{0,1}[0-9]{1,3}[)]{0,1}[-\s\./0-9]*$/g;
     const emailid = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     if (
-      token &&
       token_type &&
+      token &&
       store_id &&
       amount > 9 &&
       currency &&
@@ -92,7 +99,9 @@ async function checkOut(token, token_type, store_id, formdata) {
       customer_city.length > 1 &&
       customer_address.length > 1 &&
       customer_post_code.length === 4 &&
-      customer_email.match(emailid)
+      customer_email.match(emailid) &&
+      order_id &&
+      client_ip
     ) {
       await fetch(`${url}/api/secret-pay`, {
         method: "POST",
@@ -130,7 +139,7 @@ async function checkOut(token, token_type, store_id, formdata) {
     } else {
       return "Input(Checkout) Value is not valid";
     }
-  }else return "User Information Missing"
+  } else return "User Information Missing";
 }
 /**
  * This method is used for verifying order by order id which could be get by payment response object
@@ -140,7 +149,7 @@ async function checkOut(token, token_type, store_id, formdata) {
  * #throws ShurjopayException while merchant user name and password is invalid.
  * #throws ShurjopayVerificationException while order id is invalid or payment is not initiated properly or {#link HttpClient} exception
  */
-async function verifyPayemt(token, token_type, sp_order_id) {
+async function verifyPayemt(token_type, token, sp_order_id) {
   if (token && token_type && sp_order_id) {
     await fetch(`${url}/api/verification`, {
       method: "POST",
@@ -176,7 +185,7 @@ async function verifyPayemt(token, token_type, sp_order_id) {
  * #throws ShurjopayVerificationException while order id is invalid or payment is not initiated properly or {#link HttpClient} exception
  */
 
-async function paymentStatus(token, token_type, sp_order_id) {
+async function paymentStatus(token_type, token, sp_order_id) {
   if (token && token_type && sp_order_id) {
     await fetch(`${url}/api/payment-status`, {
       method: "POST",
