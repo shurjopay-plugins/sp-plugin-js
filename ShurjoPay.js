@@ -35,8 +35,8 @@ let payment_status = paymentStatus();
  * Return authentication token for shurjoPay payment gateway system.
  * Setup shurjopay.properties file.
  *
- * #return authentication details with valid token
- * #throws ShurjopayException while merchant username and password is invalid.
+ * @return authentication details with valid token
+ * @throws ShurjopayException while merchant username and password is invalid.
  */
 async function authonetication() {
   if (username && password) {
