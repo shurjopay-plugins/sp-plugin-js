@@ -17,11 +17,10 @@ const password = setting.password;
 const prefix = setting.prefix;
 const return_url = setting.return_url;
 const cancel_url = setting.cancel_url;
-const order_id = setting.order_id;
-const client_ip = setting.client_ip;
+
 
 let token_details = authonetication();
-let checkout_order = checkOut();
+let makePayment_details = makePayment();
 let verify_status = verifyPayemt();
 let payment_status = paymentStatus();
 
@@ -67,7 +66,7 @@ async function authonetication() {
  * #throws ShurjopayPaymentException while {#link PaymentReq} is not prepared properly or {#link HttpClient} exception
  */
 
-async function checkOut(
+async function makePayment(
   token_type,
   token,
   store_id,
@@ -93,6 +92,7 @@ async function checkOut(
       token &&
       store_id &&
       amount > 9 &&
+      amount<5000000 &&
       currency &&
       customer_phone.match(phoneno) &&
       customer_name.length > 1 &&
@@ -129,13 +129,13 @@ async function checkOut(
         }),
       })
         .then((response) => response.json())
-        .then((checkoutOrder) => {
-          checkout_order = checkoutOrder;
+        .then((makePaymentdetails) => {
+          makePayment_details = makePaymentdetails;
         })
         .catch((error) => {
           console.error("Error:", error);
         });
-      return checkout_order;
+      return makePayment_details;
     } else {
       return "Input(Checkout) Value is not valid";
     }
@@ -218,8 +218,8 @@ async function paymentStatus(token_type, token, sp_order_id) {
 export {
   authonetication,
   token_details,
-  checkOut,
-  checkout_order,
+  makePayment,
+  makePayment_details,
   paymentStatus,
   payment_status,
   verifyPayemt,
