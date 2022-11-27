@@ -147,7 +147,7 @@ async function makePayment(
 /**
  * This method is used for verifying order by order id which could be get by payment response object
  *
- * @param orderId
+ * @param token_type, token,orderId
  * @return order object if order verified successfully
  * @throws ShurjopayException while merchant user name and password is invalid.
  * @throws ShurjopayVerificationException while token_type, token, order id is invalid or payment is not initiated properly or {#link HttpClient} exception
@@ -183,7 +183,7 @@ async function verifyPayment(token_type, token, sp_order_id) {
 /**
  * This method is used for verifying order by order id which could be get by payment response object
  *
- * @param orderId
+ * @param token_type, token,orderId
  * @return order object if order verified successfully
  * @throws ShurjopayException while merchant user name and password is invalid.
  * @throws ShurjopayVerificationException while order id is invalid or payment is not initiated properly or {#link HttpClient} exception
