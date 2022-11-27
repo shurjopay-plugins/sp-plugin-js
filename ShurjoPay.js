@@ -1,7 +1,7 @@
 /*
 /**
  * 
- * Plug-in service to provide shurjoPay get way services.
+ * Plug-in service to provide shurjoPay gateway services.
  * 
  * @uthor: Saiful Islam Shanto
  * @since 2022-11-02
@@ -9,27 +9,22 @@
 *
 */
 
-// TODO distribute using npm , bower, grunt ,cdn ,yarn 
+// TODO distribute using npm , bower, grunt ,cdn ,yarn
 // TODO Data model need to be defined
-// TODO Add comments on class, method and important actions 
-// TODO remove use of global variables in plugin code
+// TODO Add comments on class, method and important actions (Done)///
+// TODO remove use of global variables in plugin code (Done)///
 // TODO shurjopay config injection refacorting needed. Work with CTO
 // TODO after this JS lib fully complete, write new code in TypeScript. with CTO
 
 import { setting } from "./setting.js";
 
+//Getting credentials from setting.js file
 const url = setting.url;
 const username = setting.username;
 const password = setting.password;
 const prefix = setting.prefix;
 const return_url = setting.return_url;
 const cancel_url = setting.cancel_url;
-
-
-let token_details = authonetication();
-let makePayment_details = makePayment();
-let verify_status = verifyPayemt();
-let payment_status = paymentStatus();
 
 /**
  * Return authentication token for shurjoPay payment gateway system.
@@ -38,7 +33,8 @@ let payment_status = paymentStatus();
  * @return authentication details with valid token
  * @throws ShurjopayException while merchant username and password is invalid.
  */
-async function authonetication() {
+async function authentication() {
+  let token_details = " ";
   if (username && password) {
     await fetch(`${url}/api/get_token`, {
       method: "POST",
@@ -59,7 +55,7 @@ async function authonetication() {
       });
     return token_details;
   } else {
-    return "User  Not Found";
+    return "User Name Not Found";
   }
 }
 
@@ -67,7 +63,7 @@ async function authonetication() {
  * This method is used for making payment.
  *
  * @param Payment request object. See the shurjoPay version-2 integration documentation(beta).docx for details.
- * @return Payment response object contains redirect URL to reach payment page, order id to verify order in shurjoPay.
+ * @return Payment response object contains redirect URL to reach payment page,token_type,token,store_id,order_id, formdata, client_ip to verify order in shurjoPay.
  * @throws ShurjopayException while merchant username and password is invalid.
  * @throws ShurjopayPaymentException while {#link PaymentReq} is not prepared properly or {#link HttpClient} exception
  */
@@ -79,6 +75,7 @@ async function makePayment(
   formdata,
   client_ip
 ) {
+  let makePayment_details = " ";
   if (formdata) {
     const {
       amount,
@@ -90,21 +87,20 @@ async function makePayment(
       customer_post_code,
       customer_email,
     } = formdata;
-    const phoneno = /^[+]*[(]{0,1}[0-9]{1,3}[)]{0,1}[-\s\./0-9]*$/g;
-    const emailid = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    const phone_regx = /^[+]*[(]{0,1}[0-9]{1,3}[)]{0,1}[-\s\./0-9]*$/g;
+    const email_regx = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     if (
       token_type &&
       token &&
       store_id &&
       amount > 9 &&
-      amount<5000000 &&
       currency &&
-      customer_phone.match(phoneno) &&
+      customer_phone.match(phone_regx) &&
       customer_name.length > 1 &&
       customer_city.length > 1 &&
       customer_address.length > 1 &&
       customer_post_code.length === 4 &&
-      customer_email.match(emailid) &&
+      customer_email.match(email_regx) &&
       order_id &&
       client_ip
     ) {
@@ -142,21 +138,22 @@ async function makePayment(
         });
       return makePayment_details;
     } else {
-      return "Input(Checkout) Value is not valid";
+      return "Input(makePayment) Value is not valid";
     }
-  } else return "User Information Missing";
+  } else {
+    return "User Information Missing";
+  }
 }
-
 /**
  * This method is used for verifying order by order id which could be get by payment response object
  *
  * @param orderId
  * @return order object if order verified successfully
  * @throws ShurjopayException while merchant user name and password is invalid.
- * @throws ShurjopayVerificationException while order id is invalid or payment is not initiated properly or {#link HttpClient} exception
+ * @throws ShurjopayVerificationException while token_type, token, order id is invalid or payment is not initiated properly or {#link HttpClient} exception
  */
-async function verifyPayemt(token_type, token, sp_order_id) {
-  // TODO return early after if checks
+async function verifyPayment(token_type, token, sp_order_id) {
+  let verify_status = " ";
   if (token && token_type && sp_order_id) {
     await fetch(`${url}/api/verification`, {
       method: "POST",
@@ -179,7 +176,7 @@ async function verifyPayemt(token_type, token, sp_order_id) {
 
     return verify_status;
   } else {
-    return "Reqire Data Not Found";
+    return "Require Data Not Found";
   }
 }
 
@@ -192,6 +189,7 @@ async function verifyPayemt(token_type, token, sp_order_id) {
  * @throws ShurjopayVerificationException while order id is invalid or payment is not initiated properly or {#link HttpClient} exception
  */
 async function paymentStatus(token_type, token, sp_order_id) {
+  let payment_status = " ";
   if (token && token_type && sp_order_id) {
     await fetch(`${url}/api/payment-status`, {
       method: "POST",
@@ -213,21 +211,12 @@ async function paymentStatus(token_type, token, sp_order_id) {
       });
     return payment_status;
   } else {
-    return "Reqire Data Not Found";
+    return "Require Data Not Found";
   }
 }
 
 /*
  * Export functions and return values
- */
-export {
-  authonetication,
-  token_details,
-  makePayment,
-  makePayment_details,
-  paymentStatus,
-  payment_status,
-  verifyPayemt,
-  verify_status,
-};
+*/
+export { authentication, makePayment, paymentStatus, verifyPayment };
 
