@@ -155,7 +155,6 @@ async function verifyPayment(token_details, sp_order_id) {
     })
       .then((response) => response.json())
       .then((paymentDetails) => {
-        log(paymentDetails);
         verify_status = paymentDetails;
       })
       .catch((error) => {
@@ -205,20 +204,6 @@ async function paymentStatus(token_details, sp_order_id) {
   }
 }
 
-async function log(...msgs) {
-  let dirHandle = await window.showDirectoryPicker();
-  const file = await dirHandle.getFileHandle("../log.txt", {
-    create: true,
-  });
-
-  const blob = new Blob(msgs);
-  const writableStream = await file.createWritable();
-  // write our file
-  console.log(blob);
-  await writableStream.write(blob);
-  // close the file and write the contents to disk.
-  await writableStream.close();
-}
 /*
  * Export functions and return values
  */
