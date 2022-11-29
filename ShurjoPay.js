@@ -63,18 +63,12 @@ async function authentication() {
  * This method is used for making payment.
  *
  * @param Payment request object. See the shurjoPay version-2 integration documentation(beta).docx for details.
- * @return Payment response object contains redirect URL to reach payment page,token_type,token,store_id,order_id, formdata, client_ip to verify order in shurjoPay.
+ * @return Payment response object contains redirect URL to reach payment page,token_details,order_id, formdata, client_ip to verify order in shurjoPay.
  * @throws ShurjopayException while merchant username and password is invalid.
  * @throws ShurjopayPaymentException while {#link PaymentReq} is not prepared properly or {#link HttpClient} exception
  */
-async function makePayment(
-  token_type,
-  token,
-  store_id,
-  order_id,
-  formdata,
-  client_ip
-) {
+async function makePayment(token_details, order_id, formdata, client_ip) {
+  const { token, token_type, store_id } = token_details;
   let makePayment_details = " ";
   if (formdata) {
     const {
@@ -147,12 +141,13 @@ async function makePayment(
 /**
  * This method is used for verifying order by order id which could be get by payment response object
  *
- * @param token_type, token,orderId
+ * @param token_details,orderId
  * @return order object if order verified successfully
  * @throws ShurjopayException while merchant user name and password is invalid.
  * @throws ShurjopayVerificationException while token_type, token, order id is invalid or payment is not initiated properly or {#link HttpClient} exception
  */
-async function verifyPayment(token_type, token, sp_order_id) {
+async function verifyPayment(token_details, sp_order_id) {
+  const { token, token_type } = token_details;
   let verify_status = " ";
   if (token && token_type && sp_order_id) {
     await fetch(`${url}/api/verification`, {
@@ -183,12 +178,13 @@ async function verifyPayment(token_type, token, sp_order_id) {
 /**
  * This method is used for verifying order by order id which could be get by payment response object
  *
- * @param token_type, token,orderId
+ * @param token_details, orderId
  * @return order object if order verified successfully
  * @throws ShurjopayException while merchant user name and password is invalid.
  * @throws ShurjopayVerificationException while order id is invalid or payment is not initiated properly or {#link HttpClient} exception
  */
-async function paymentStatus(token_type, token, sp_order_id) {
+async function paymentStatus(token_details, sp_order_id) {
+  const { token, token_type } = token_details;
   let payment_status = " ";
   if (token && token_type && sp_order_id) {
     await fetch(`${url}/api/payment-status`, {
@@ -217,6 +213,6 @@ async function paymentStatus(token_type, token, sp_order_id) {
 
 /*
  * Export functions and return values
-*/
+ */
 export { authentication, makePayment, paymentStatus, verifyPayment };
 
