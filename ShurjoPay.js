@@ -231,5 +231,5 @@ async function paymentStatus(sp_order_id) {
 /*
  * Export functions and return values
  */
-export { makePayment, paymentStatus, verifyPayment };
+export { authentication, makePayment, paymentStatus, verifyPayment };
 
