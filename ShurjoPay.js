@@ -9,7 +9,7 @@
 *
 */
 
-import { setting } from "./setting.js";
+import { setting } from "../../setting.js";
 
 //Getting credentials from setting.js file
 const url = setting.url;
