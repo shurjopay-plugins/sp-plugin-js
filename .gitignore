@@ -1,0 +1,34 @@
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+pids
+*.pid
+
+# Build tool
+bin/
+dist/
+
+# Eclipse
+.classpath
+.project
+.factorypath
+.settings/
+.springBeans
+# IntelliJ IDEA [http://gary-rowe.com/agilestack/2012/10/12/a-gitignore-file-for-intellij-and-eclipse-with-maven]
+/.idea/
+*.iml
+*.iws
+
+.DS_Store
+Thumbs.db
+
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json

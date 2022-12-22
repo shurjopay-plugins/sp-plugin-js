@@ -1,8 +1,8 @@
 {
-  "name": "sp-plugin-javascript",
-  "version": "1.0.0",
+  "name": "shurjopay-js",
+  "version": "0.1.0",
   "description": "Official shurjoPay JavaScript package (plugin) for merchants or service providers to connect with shurjoPay Payment Gateway v2.1 developed and maintained by shurjoMukhi Limited.",
-  "main": "Shurjopay.js",
+  "main": "shurjopay.js",
   "directories": {
     "test": "test"
   },
@@ -14,7 +14,8 @@
     "url": "git+https://github.com/shurjopay-plugins/sp-plugin-js.git"
   },
   "keywords": [
-    "Shurjopay",
+    "shurjopay",
+    "shurjomukhi",
     "sp",
     "sp-plugin",
     "sp-plugin-js",
