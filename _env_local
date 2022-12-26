@@ -1,5 +1,5 @@
-REACT_APP_URL=https://sandbox.shurjopayment.com
-REACT_APP_USER_NAME=REACT_APP_sandbox
-REACT_APP_PASSWORD=pyyk97hu&6u6
-REACT_APP_PREFIX=REACT_APP
-REACT_APP_RETURN_URL=https://sandbox.shurjopayment.com/reREACT_APPonse
+REACT_APP_SP_ENDPOINT=https://sandbox.shurjopayment.com
+REACT_APP_SP_USERNAME=REACT_APP_sandbox
+REACT_APP_SP_PASSWORD=pyyk97hu&6u6
+REACT_APP_SP_PREFIX=SP
+REACT_APP_SP_RETURN_URL=https://sandbox.shurjopayment.com/reREACT_APPonse
