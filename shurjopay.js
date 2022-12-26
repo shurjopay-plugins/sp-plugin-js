@@ -9,50 +9,51 @@
 *
 */
 
-import { setting } from "../../setting.js";
 
-//Getting credentials from setting.js file
-const url = setting.url;
-const username = setting.username;
-const password = setting.password;
-const prefix = setting.prefix;
-const return_url = setting.return_url;
-const cancel_url = setting.cancel_url;
+import { shurjopay_config } from '../../shurjopay_config.js';
+
+//Getting credentials from shurjopay_config.js file
+const sp_endpoint = shurjopay_config.SP_ENDPOINT;
+const sp_username= shurjopay_config.SP_USERNAME;
+const sp_password = shurjopay_config.SP_PASSWORD;
+const sp_prefix = shurjopay_config.SP_PREFIX;
+const sp_return_url = shurjopay_config.SP_RETURN_URL;
+
 
 /**
  * Return authentication token for shurjoPay payment gateway system.
- * Setup setting.js file.
+ * Setup shurjopay.properties file.
  *
  * @return authentication details with valid token
  * @throws ShurjopayException while merchant username and password is invalid.
  */
 async function authentication() {
-  //initiate authentication details which is hold api response
-  let token_details = "";
-  if (!username && !password) {
-    return "Authentication Error";
-  } else {
-    await fetch(`${url}/api/get_token`, {
+   //initiate authentication details which is hold api response
+  let token_details = " ";
+  if (sp_username && sp_password) {
+    await fetch(`${sp_endpoint}/api/get_token`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
         //request body credentials
-        username: username,
-        password: password,
+        username: sp_username,
+        password: sp_password,
       }),
     })
-      //response received as json
+    //response received as json
       .then((response) => response.json())
       .then((tokenDetails) => {
         token_details = tokenDetails;
       })
       .catch((error) => {
-        //error handler if any problem to fetch api
+         //error handler if any problem to fetch api
         console.error("Error:", error);
       });
     return token_details;
+  } else {
+    return "Authentication Error";
   }
 }
 
@@ -77,27 +78,25 @@ async function makePayment(order_id, form_data) {
   const token_details = await authentication();
   const { token, token_type, store_id } = token_details;
   //initiate make payment details which is hold api response
-  let makePayment_details = "";
+  let makePayment_details = " ";
 
   //Checking all necessary values and formate
   if (
-    !token_type &&
-    !token &&
-    !store_id &&
-    !form_data.amount > 9 &&
-    !form_data.currency &&
-    !form_data.customer_phone.match(phone_regex) &&
-    !form_data.customer_name.length > 1 &&
-    !form_data.customer_city.length > 1 &&
-    !form_data.customer_address.length > 1 &&
-    !form_data.customer_post_code.length === 4 &&
-    !form_data.customer_email.match(email_regex) &&
-    !order_id
+    token_type &&
+    token &&
+    store_id &&
+    form_data.amount > 9 &&
+    form_data.currency &&
+    form_data.customer_phone.match(phone_regex) &&
+    form_data.customer_name.length > 1 &&
+    form_data.customer_city.length > 1 &&
+    form_data.customer_address.length > 1 &&
+    form_data.customer_post_code.length === 4 &&
+    form_data.customer_email.match(email_regex) &&
+    order_id
   ) {
-    return "shurjoPay Payment Failed";
-  } else {
     //fetching payment url from makePayment api
-    await fetch(`${url}/api/secret-pay`, {
+    await fetch(`${sp_endpoint}/api/secret-pay`, {
       method: "POST",
       headers: {
         //request header credentials
@@ -107,11 +106,11 @@ async function makePayment(order_id, form_data) {
       },
       body: JSON.stringify({
         //request body credentials
-        prefix: prefix,
+        prefix: sp_prefix,
         store_id: store_id,
         token: token,
-        return_url: return_url,
-        cancel_url: cancel_url,
+        return_url: sp_return_url,
+        cancel_url: sp_return_url,
         amount: form_data.amount,
         order_id: order_id,
         currency: form_data.currency,
@@ -134,9 +133,10 @@ async function makePayment(order_id, form_data) {
         console.error("Error:", error);
       });
     return makePayment_details;
+  } else {
+    return "shurjoPay Payment Failed";
   }
 }
-
 /**
  * This method is used for verifying order by order id which could be get by payment response object
  *
@@ -149,11 +149,9 @@ async function verifyPayment(sp_order_id) {
   //call authentication function for getting token details.
   const token_details = await authentication();
   const { token, token_type } = token_details;
-  let verify_status = "";
-  if (!token && !token_type && !sp_order_id) {
-    return "Payment Verification Fail";
-  } else {
-    await fetch(`${url}/api/verification`, {
+  let verify_status = " ";
+  if (token && token_type && sp_order_id) {
+    await fetch(`${sp_endpoint}/api/verification`, {
       method: "POST",
       headers: {
         //request header credentials
@@ -177,6 +175,8 @@ async function verifyPayment(sp_order_id) {
       });
 
     return verify_status;
+  } else {
+    return "Payment Verification Fail";
   }
 }
 
@@ -192,11 +192,9 @@ async function paymentStatus(sp_order_id) {
   //call authentication function for getting token details.
   const token_details = await authentication();
   const { token, token_type } = token_details;
-  let payment_status = "";
-  if (!token && !token_type && !sp_order_id) {
-    return "payment Status Not Found";
-  } else {
-    await fetch(`${url}/api/payment-status`, {
+  let payment_status = " ";
+  if (token && token_type && sp_order_id) {
+    await fetch(`${sp_endpoint}/api/payment-status`, {
       method: "POST",
       headers: {
         //request header credentials
@@ -219,11 +217,13 @@ async function paymentStatus(sp_order_id) {
         console.error("Error:", error);
       });
     return payment_status;
+  } else {
+    return "payment Status Not Found";
   }
 }
 
 /*
  * Export functions and return values
  */
-export { makePayment, paymentStatus, verifyPayment };
+export { authentication, makePayment, paymentStatus, verifyPayment };
 
