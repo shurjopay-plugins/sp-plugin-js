@@ -1,4 +1,4 @@
-﻿# ![shurjoPay](https://shurjopay.com.bd/dev/images/shurjoPay.png) JavaScript plugin package
+# ![shurjoPay](https://shurjopay.com.bd/dev/images/shurjoPay.png) JavaScript plugin package
 
 ![Made With](https://badgen.net/badge/Made%20with/javascript)
 [![Test Status](https://github.com/rust-random/rand/workflows/Tests/badge.svg?event=push)]()
