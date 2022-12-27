@@ -1,7 +1,6 @@
 #### Step 3: Setup configuration parameters for shurjopay plugin correctly in your application.
 
-<br>
-e.g. API endpoint URL, username, password, prefix for the order id and return URL.<br>
+e.g. API endpoint URL, username, password, prefix for the order id and return URL.
 Create a shurjopay_config.js in the project directory with text similar like below:
 
 ```javaScript
