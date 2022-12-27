@@ -58,7 +58,7 @@ const shurjopay_config = {
     SP_USERNAME: "sp_sandbox",
     SP_PASSWORD: "pyyk97hu&6u6",
     SP_PREFIX: "sp",
-    SP_RETURN_URL: "http://127.0.0.1:5519/return.html",
+    SP_RETURN_URL: "https://<your.app.com>/shurjopay-response",
 };
 
 export { shurjopay_config };
