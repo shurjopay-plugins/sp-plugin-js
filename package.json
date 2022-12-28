@@ -24,7 +24,8 @@
   "author": "Saiful Islam Shanto",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/shurjopay-plugins/sp-plugin-js/issues"
+    "url": "https://github.com/shurjopay-plugins/sp-plugin-js/issues",
+    "email": "plugindev@shurjomukhi.com.bd"
   },
   "homepage": "https://github.com/shurjopay-plugins"
 }
