@@ -3,7 +3,7 @@
 ![Made With](https://badgen.net/badge/Made%20with/javascript)
 [![Test Status](https://github.com/rust-random/rand/workflows/Tests/badge.svg?event=push)]()
 ![NPM](https://img.shields.io/npm/l/sp-plugin)
-![version](https://badgen.net/badge/version/0.1.0)
+![version](https://badgen.net/npm/v/shurjopay-js)
 
 Official shurjoPay JavaScript package (plugin) for merchants or service providers to connect with [**_shurjoPay_**](https://shurjopay.com.bd) Payment Gateway v2.1 developed and maintained by [_**ShurjoMukhi Limited**_](https://shurjomukhi.com.bd).
 
