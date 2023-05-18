@@ -30,7 +30,7 @@ const sp_return_url = shurjopay_config.SP_RETURN_URL;
 async function authentication() {
   try {
       // Fetch payment URL from authenticate API
-    const response = await fetch(`${url}/api/get_token`, {
+    const response = await fetch(`${sp_endpoint}/api/get_token`, {
       method: "POST",
        // Request Header credentials
       headers: {
@@ -38,8 +38,8 @@ async function authentication() {
       },
        // Request body credentials
       body: JSON.stringify({
-        username: username,
-        password: password,
+        username: sp_username,
+        password: sp_password,
       }),
     });
 
@@ -75,11 +75,11 @@ async function makePayment(order_id, form_data) {
     const { token, token_type, store_id } = token_details;
     const payLoad={
       // Request body credentials
-      prefix: prefix,
+      prefix: sp_prefix,
       store_id: store_id,
       token: token,
-      return_url: return_url,
-      cancel_url: cancel_url,
+      return_url: sp_return_url,
+      cancel_url: sp_return_url,
       order_id: order_id,
       client_ip: client_ip,
       ...form_data
@@ -91,7 +91,7 @@ async function makePayment(order_id, form_data) {
     }
 
     // Fetch payment URL from makePayment API
-    const response = await fetch(`${url}/api/secret-pay`, {
+    const response = await fetch(`${sp_endpoint}/api/secret-pay`, {
       method: "POST",
       headers: {
         // Request header credentials
@@ -130,7 +130,7 @@ async function verifyPayment(sp_order_id) {
     const token_details = await authentication();
     const { token, token_type } = token_details;
 
-    const response = await fetch(`${url}/api/verification`, {
+    const response = await fetch(`${sp_endpoint}/api/verification`, {
       method: "POST",
       headers: {
         // Request header credentials
@@ -172,7 +172,7 @@ async function paymentStatus(sp_order_id) {
     const token_details = await authentication();
     const { token, token_type } = token_details;
 
-    const response = await fetch(`${url}/api/verification`, {
+    const response = await fetch(`${sp_endpoint}/api/verification`, {
       method: "POST",
       headers: {
         // Request header credentials
