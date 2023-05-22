@@ -3,16 +3,15 @@
 ![Made With](https://badgen.net/badge/Made%20with/javascript)
 [![Test Status](https://github.com/rust-random/rand/workflows/Tests/badge.svg?event=push)]()
 ![NPM](https://img.shields.io/npm/l/sp-plugin)
-![version](https://badgen.net/badge/version/0.1.0)
+![version](https://badgen.net/npm/v/shurjopay-js)
 
 Official shurjoPay JavaScript package (plugin) for merchants or service providers to connect with [**_shurjoPay_**](https://shurjopay.com.bd) Payment Gateway v2.1 developed and maintained by [_**ShurjoMukhi Limited**_](https://shurjomukhi.com.bd).
 
 This plugin package can be used with any javascript application or framework (e.g. React, vue.js, Angular etc).
 Also it makes it easy for developers to integrate with shurjoPay v2.1 with just three API calls:
 
-1. **makePayment**: create and send payment request
+1. **makePayment**: create and send payment processing request
 1. **verifyPayment**: verify payment status at shurjoPay
-1. **paymentStatus**: Check payment details and status
 
 Also reduces many of the things that you had to do manually
 
@@ -37,7 +36,7 @@ npm install shurjopay-js
 #### Step 2: Import the functions from package in your code as necessary and initiate payment method.
 
 ```javaScript
-import {  makePayment, paymentStatus, verifyPayment } from "shurjopay-js";
+import {  makePayment, verifyPayment } from "shurjopay-js";
 ```
 
 ```javaScript
